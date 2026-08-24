@@ -1,0 +1,478 @@
+#   1 Input
+#   3 Hidden Neurons
+#   3 Output Classes
+#
+# Classes:
+#
+#   0 = LOW
+#   1 = MID
+#   2 = HIGH
+#
+# =========================================================
+
+
+# =========================================================
+# INPUT
+#
+# Input range:
+#
+#   0 ... 100
+#
+# =========================================================
+
+record(ao, "$(P)nn_input") {
+    field(DESC, "Neural Network Input")
+    field(DTYP, "Soft Channel")
+
+    field(VAL,  "50")
+    field(PREC, "1")
+
+    field(LOPR, "0")
+    field(HOPR, "100")
+
+    field(DRVL, "0")
+    field(DRVH, "100")
+
+    field(FLNK, "$(P)nn_x")
+}
+
+
+# =========================================================
+# NORMALIZATION
+#
+# x = input / 100
+#
+# Example:
+#
+# input = 80
+# x     = 0.8
+#
+# =========================================================
+
+record(calc, "$(P)nn_x") {
+    field(DESC, "Normalized Input")
+
+    field(INPA, "$(P)nn_input")
+    field(CALC, "A/100")
+
+    field(PREC, "6")
+    field(PINI, "YES")
+
+    field(FLNK, "$(P)h1_z")
+}
+
+
+# =========================================================
+# HIDDEN LAYER - NEURON 1
+#
+# z1 = -20*x + 6.6
+#
+# =========================================================
+
+record(calc, "$(P)h1_z") {
+    field(DESC, "Hidden Neuron 1 Weighted Sum")
+
+    field(INPA, "$(P)nn_x")
+    field(CALC, "-20*A+6.6")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)h1")
+}
+
+
+# =========================================================
+# HIDDEN NEURON 1 ACTIVATION
+#
+# h1 = sigmoid(z1)
+#
+# sigmoid(z) = 1/(1+exp(-z))
+#
+# =========================================================
+
+record(calc, "$(P)h1") {
+    field(DESC, "Hidden Neuron 1 Activation")
+
+    field(INPA, "$(P)h1_z")
+    field(CALC, "1/(1+EXP(-A))")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)h2_z")
+}
+
+
+# =========================================================
+# HIDDEN LAYER - NEURON 2
+#
+# z2 = 20*x - 6.6
+#
+# =========================================================
+
+record(calc, "$(P)h2_z") {
+    field(DESC, "Hidden Neuron 2 Weighted Sum")
+
+    field(INPA, "$(P)nn_x")
+    field(CALC, "20*A-6.6")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)h2")
+}
+
+
+# =========================================================
+# HIDDEN NEURON 2 ACTIVATION
+#
+# h2 = sigmoid(z2)
+#
+# =========================================================
+
+record(calc, "$(P)h2") {
+    field(DESC, "Hidden Neuron 2 Activation")
+
+    field(INPA, "$(P)h2_z")
+    field(CALC, "1/(1+EXP(-A))")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)h3_z")
+}
+
+
+# =========================================================
+# HIDDEN LAYER - NEURON 3
+#
+# z3 = 20*x - 13.2
+#
+# =========================================================
+
+record(calc, "$(P)h3_z") {
+    field(DESC, "Hidden Neuron 3 Weighted Sum")
+
+    field(INPA, "$(P)nn_x")
+    field(CALC, "20*A-13.2")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)h3")
+}
+
+
+# =========================================================
+# HIDDEN NEURON 3 ACTIVATION
+#
+# h3 = sigmoid(z3)
+#
+# =========================================================
+
+record(calc, "$(P)h3") {
+    field(DESC, "Hidden Neuron 3 Activation")
+
+    field(INPA, "$(P)h3_z")
+    field(CALC, "1/(1+EXP(-A))")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)score_low")
+}
+
+
+# =========================================================
+# OUTPUT LAYER
+#
+# LOW:
+#
+# score_low = 6*h1 - 3
+#
+# =========================================================
+
+record(calc, "$(P)score_low") {
+    field(DESC, "LOW Class Score")
+
+    field(INPA, "$(P)h1")
+    field(CALC, "6*A-3")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)score_mid")
+}
+
+
+# =========================================================
+# MID OUTPUT SCORE
+#
+# score_mid = 6*h2 - 6*h3 - 3
+#
+# =========================================================
+
+record(calc, "$(P)score_mid") {
+    field(DESC, "MID Class Score")
+
+    field(INPA, "$(P)h2")
+    field(INPB, "$(P)h3")
+
+    field(CALC, "6*A-6*B-3")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)score_high")
+}
+
+
+# =========================================================
+# HIGH OUTPUT SCORE
+#
+# score_high = 6*h3 - 3
+#
+# =========================================================
+
+record(calc, "$(P)score_high") {
+    field(DESC, "HIGH Class Score")
+
+    field(INPA, "$(P)h3")
+    field(CALC, "6*A-3")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)exp_low")
+}
+
+
+# =========================================================
+# SOFTMAX
+#
+# First calculate:
+#
+# exp(score_low)
+# exp(score_mid)
+# exp(score_high)
+#
+# =========================================================
+
+
+# ---------------------------------------------------------
+# exp LOW
+# ---------------------------------------------------------
+
+record(calc, "$(P)exp_low") {
+    field(DESC, "Exponential LOW Score")
+
+    field(INPA, "$(P)score_low")
+    field(CALC, "EXP(A)")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)exp_mid")
+}
+
+
+# ---------------------------------------------------------
+# exp MID
+# ---------------------------------------------------------
+
+record(calc, "$(P)exp_mid") {
+    field(DESC, "Exponential MID Score")
+
+    field(INPA, "$(P)score_mid")
+    field(CALC, "EXP(A)")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)exp_high")
+}
+
+
+# ---------------------------------------------------------
+# exp HIGH
+# ---------------------------------------------------------
+
+record(calc, "$(P)exp_high") {
+    field(DESC, "Exponential HIGH Score")
+
+    field(INPA, "$(P)score_high")
+    field(CALC, "EXP(A)")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)softmax_total")
+}
+
+
+# =========================================================
+# SOFTMAX TOTAL
+#
+# total =
+#
+# exp_low + exp_mid + exp_high
+#
+# =========================================================
+
+record(calc, "$(P)softmax_total") {
+    field(DESC, "Softmax Denominator")
+
+    field(INPA, "$(P)exp_low")
+    field(INPB, "$(P)exp_mid")
+    field(INPC, "$(P)exp_high")
+
+    field(CALC, "A+B+C")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)p_low")
+}
+
+
+# =========================================================
+# LOW PROBABILITY
+#
+# p_low =
+#
+# exp_low / softmax_total
+#
+# =========================================================
+
+record(calc, "$(P)p_low") {
+    field(DESC, "LOW Probability")
+
+    field(INPA, "$(P)exp_low")
+    field(INPB, "$(P)softmax_total")
+
+    field(CALC, "A/B")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)p_mid")
+}
+
+
+# =========================================================
+# MID PROBABILITY
+#
+# p_mid =
+#
+# exp_mid / softmax_total
+#
+# =========================================================
+
+record(calc, "$(P)p_mid") {
+    field(DESC, "MID Probability")
+
+    field(INPA, "$(P)exp_mid")
+    field(INPB, "$(P)softmax_total")
+
+    field(CALC, "A/B")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)p_high")
+}
+
+
+# =========================================================
+# HIGH PROBABILITY
+#
+# p_high =
+#
+# exp_high / softmax_total
+#
+# =========================================================
+
+record(calc, "$(P)p_high") {
+    field(DESC, "HIGH Probability")
+
+    field(INPA, "$(P)exp_high")
+    field(INPB, "$(P)softmax_total")
+
+    field(CALC, "A/B")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)prob_sum")
+}
+
+
+# =========================================================
+# PROBABILITY CHECK
+#
+# The Softmax probabilities should satisfy:
+#
+# p_low + p_mid + p_high = 1
+#
+# =========================================================
+
+record(calc, "$(P)prob_sum") {
+    field(DESC, "Probability Sum")
+
+    field(INPA, "$(P)p_low")
+    field(INPB, "$(P)p_mid")
+    field(INPC, "$(P)p_high")
+
+    field(CALC, "A+B+C")
+
+    field(PREC, "6")
+
+    field(FLNK, "$(P)class_index")
+}
+
+
+# =========================================================
+# CLASSIFICATION
+#
+# A = p_low
+# B = p_mid
+# C = p_high
+#
+# Output:
+#
+# 0 = LOW
+# 1 = MID
+# 2 = HIGH
+#
+#
+# Logic:
+#
+# if MID is largest  -> add 1
+# if HIGH is largest -> add 2
+# otherwise          -> LOW = 0
+#
+# =========================================================
+
+record(calc, "$(P)class_index") {
+    field(DESC, "Predicted Class Index")
+
+    field(INPA, "$(P)p_low")
+    field(INPB, "$(P)p_mid")
+    field(INPC, "$(P)p_high")
+
+    field(CALC, "(B>A&&B>=C)+2*(C>A&&C>B)")
+
+    field(PREC, "0")
+
+    field(FLNK, "$(P)class")
+}
+
+
+# =========================================================
+# HUMAN READABLE CLASS
+#
+# 0 = LOW
+# 1 = MID
+# 2 = HIGH
+#
+# =========================================================
+
+record(mbbi, "$(P)class") {
+    field(DESC, "Neural Network Prediction")
+    field(DTYP, "Soft Channel")
+
+    field(INP, "$(P)class_index")
+
+    field(ZRST, "LOW")
+    field(ONST, "MID")
+    field(TWST, "HIGH")
+
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+}
