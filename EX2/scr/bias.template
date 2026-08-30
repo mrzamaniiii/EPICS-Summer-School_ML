@@ -1,0 +1,5 @@
+
+record(ai, "$(P)$(R)bias-$(name)") {
+	field(VAL, $(bias))
+	field(PINI, "YES")
+}

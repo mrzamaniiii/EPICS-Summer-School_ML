@@ -1,0 +1,11 @@
+
+record(calcout, "$(P)$(R)neuron-$(name)-ac") {
+	field(INPA, "$(P)$(R)neuron-$(name)-sum")
+	field(CALC, "1 / (1 + EXP(-A))")
+	field(FLNK, "$(P)$(R)neuron-$(name)")
+}
+
+record(ai, "$(P)$(R)neuron-$(name)") {
+	field(INP, "$(P)$(R)neuron-$(name)-ac")
+	field(FLNK, "$(P)$(R)neuron-$(name-next)")
+}

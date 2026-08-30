@@ -1,0 +1,49 @@
+
+
+record(ai, "$(P)$(R)neuron-null") {
+	field(VAL, "0")
+	field(PINI, "YES")
+}
+
+record(ai, "$(P)$(R)weight-null") {
+	field(VAL, "0")
+	field(PINI, "YES")
+}
+
+record(ai, "$(P)$(R)input") {
+	field(VAL, "50")
+	field(PINI, "YES")
+	field(FLNK, "$(P)$(R)neuron-01")
+}
+
+record(calcout, "$(P)$(R)neuron-01") {
+	field(INPA, "$(P)$(R)input")
+	field(CALC, "A * 0.01")
+	field(FLNK, "$(P)$(R)neuron-11-sum")
+}
+
+record(calcout, "$(P)$(R)calctest") {
+	field(INPA, "$(P)$(R)neuron-01")
+	field(CALC, "A + 10")
+}
+
+record(fanout, "$(P)$(R)neuron-score-fanout") {
+	field(LNK0, "$(P)$(R)neuron-21-softmax")
+	field(LNK1, "$(P)$(R)neuron-22-softmax")
+	field(LNK2, "$(P)$(R)neuron-23-softmax")
+}
+
+record(calcout, "$(P)$(R)max-class") {
+	field(INPA, "$(P)$(R)neuron-21-softmax")
+	field(INPB, "$(P)$(R)neuron-22-softmax")
+	field(INPC, "$(P)$(R)neuron-23-softmax CPP")
+	field(CALC, "(A > B) && (A > C) ? 0 : ( (B > A) && (B > C) ? 1 : 2)")
+	field(FLNK, "$(P)$(R)class-out")
+}
+
+record(mbbi, "$(P)$(R)class-out") {
+	field(INP, "$(P)$(R)max-class")
+	field(ZRST, "RISING")
+	field(ONST, "STABLE")
+	field(TWST, "FALLING")
+}
