@@ -1,0 +1,26 @@
+
+
+record(calcout, "$(P)$(R)neuron-$(name)-sum") {
+	field(INPA, "$(P)$(R)bias-$(name)")
+	field(INPB, "$(P)$(R)neuron-$(in1)")
+	field(INPC, "$(P)$(R)weight-$(w1)")
+	field(INPD, "$(P)$(R)neuron-$(in2)")
+	field(INPE, "$(P)$(R)weight-$(w2)")
+	field(INPF, "$(P)$(R)neuron-$(in3)")
+	field(INPG, "$(P)$(R)weight-$(w3)")
+	field(CALC, "A+B*C+D*E+F*G")
+	field(FLNK, "$(P)$(R)neuron-$(name)-ac")
+}
+
+record(calcout, "$(P)$(R)neuron-$(name)-ac") {
+	field(INPA, "$(P)$(R)neuron-$(name)-sum")
+	field(CALC, "1 / (1 + EXP(-A))")
+	field(FLNK, "$(P)$(R)neuron-$(name)")
+}
+
+record(ai, "$(P)$(R)neuron-$(name)") {
+	field(INP, "$(P)$(R)neuron-$(name)-ac")
+	field(FLNK, "$(P)$(R)neuron-$(name-next)")
+}
+
+

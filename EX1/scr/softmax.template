@@ -1,0 +1,8 @@
+
+record(calcout, "$(P)$(R)neuron-$(name)-softmax") {
+	field(INPA, "$(P)$(R)neuron-$(name)")
+	field(INPB, "$(P)$(R)neuron-$(other1)")
+	field(INPC, "$(P)$(R)neuron-$(other2)")
+	field(CALC, "EXP(A) / (EXP(A)+EXP(B)+EXP(C))")
+}
+

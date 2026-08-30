@@ -1,0 +1,6 @@
+
+record(ai, "$(P)$(R)weight-$(name1)-$(name2)") {
+	field(VAL, $(weight))
+	field(PINI, "YES")
+}
+
