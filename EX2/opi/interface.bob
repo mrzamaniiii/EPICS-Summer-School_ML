@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display version="2.0.0">
+  <name>Display</name>
+  <width>1400</width>
+  <height>810</height>
+  <background_color>
+    <color name="Interface Background" red="220" green="225" blue="221">
+    </color>
+  </background_color>
+  <widget type="multi_state_led" version="2.0.0">
+    <name>LED (Multi State)</name>
+    <pv_name>ml-nn:ex2:class-out</pv_name>
+    <x>676</x>
+    <y>182</y>
+    <states>
+      <state>
+        <value>0</value>
+        <label>FALLING</label>
+        <color>
+          <color name="OK" red="65" green="229" blue="65">
+          </color>
+        </color>
+      </state>
+      <state>
+        <value>1</value>
+        <label>STABLE</label>
+        <color>
+          <color name="MINOR" red="255" green="235" blue="17">
+          </color>
+        </color>
+      </state>
+      <state>
+        <value>2</value>
+        <label>RISING</label>
+        <color>
+          <color name="MAJOR" red="255" green="31" blue="26">
+          </color>
+        </color>
+      </state>
+    </states>
+  </widget>
+  <widget type="scaledslider" version="2.0.0">
+    <name>Scaled Slider</name>
+    <pv_name>ml-nn:ex2:input</pv_name>
+    <x>140</x>
+    <y>70</y>
+    <width>55</width>
+    <height>250</height>
+    <horizontal>false</horizontal>
+    <show_hihi>false</show_hihi>
+    <show_high>false</show_high>
+    <show_low>false</show_low>
+    <show_lolo>false</show_lolo>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update</name>
+    <pv_name>ml-nn:ex2:neuron-11</pv_name>
+    <x>210</x>
+    <y>160</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_1</name>
+    <pv_name>ml-nn:ex2:neuron-12</pv_name>
+    <x>210</x>
+    <y>180</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_2</name>
+    <pv_name>ml-nn:ex2:neuron-13</pv_name>
+    <x>210</x>
+    <y>200</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_3</name>
+    <pv_name>ml-nn:ex2:neuron-21</pv_name>
+    <x>370</x>
+    <y>160</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_4</name>
+    <pv_name>ml-nn:ex2:neuron-22</pv_name>
+    <x>370</x>
+    <y>180</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_5</name>
+    <pv_name>ml-nn:ex2:neuron-23</pv_name>
+    <x>370</x>
+    <y>200</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_6</name>
+    <pv_name>ml-nn:ex2:neuron-21-softmax</pv_name>
+    <x>546</x>
+    <y>160</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_7</name>
+    <pv_name>ml-nn:ex2:neuron-22-softmax</pv_name>
+    <x>546</x>
+    <y>180</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_8</name>
+    <pv_name>ml-nn:ex2:neuron-23-softmax</pv_name>
+    <x>546</x>
+    <y>200</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry</name>
+    <pv_name>ml-nn:ex2:input</pv_name>
+    <x>30</x>
+    <y>170</y>
+  </widget>
+</display>
